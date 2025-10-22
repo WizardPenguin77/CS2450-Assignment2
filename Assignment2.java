@@ -10,6 +10,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -18,6 +20,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.Group;
+import javafx.scene.shape.*;
 
 
 
@@ -51,7 +54,6 @@ public class Assignment2 extends Application{
             new MenuItem("Contact Us"),
             new MenuItem("Help")
         );
-
 
         // moreMenu dropdown on hovering over moreButton
         moreButton.setOnMouseEntered(e -> {
@@ -97,15 +99,25 @@ public class Assignment2 extends Application{
         mapView.setFitWidth(800);
         mapView.setSmooth(true);
 
-        StackPane mapContainer = new StackPane(mapView);
-        mapContainer.setAlignment(Pos.CENTER);
+        Group mapContainer = new Group(mapView);
         mapContainer.setStyle("-fx-background-color:linear-gradient(to right, #49AAF4, #7BD0F8);");
 
-        // scrollpane to zoom
+        // scrollpane to zoom thanks stackoverflow
         ZoomableScrollPane mapScrollPane = new ZoomableScrollPane(mapContainer);
         mapScrollPane.setStyle("-fx-background-color: transparent; " + "-fx-background: transparent;");
         //endregion
         rootWindow.setCenter(mapScrollPane);
+
+        Polygon florida = createState(new double[]{534.67,363.7,625.8,360.5,661.3,443.5,638.7,452.4,609.7,404,536.3,376.6,532.3,366.9}, "Death", mapContainer);
+  
+
+        mapContainer.getChildren().addAll(florida);
+
+        // temporary helper to get coordinates for creating states
+        mapView.setOnMouseClicked(e -> {
+            System.out.println(e.getX() + ", " + e.getY());
+        });
+
 
         Scene scene = new Scene(rootWindow, 1280, 720);
         primaryStage.setScene(scene);
@@ -119,6 +131,48 @@ public class Assignment2 extends Application{
 
     private double MIN_SCALE = 1.24;
     private double MAX_SCALE = 6;
+
+    private Polygon createState(double[] coordinates, String weatherInfo, Group mapContainer)
+    {
+        Polygon state = new Polygon(coordinates);
+        state.setFill(Color.color(0, 0, 1, 0.0));
+        state.setStroke(Color.TRANSPARENT);
+        state.setStrokeWidth(2);
+
+        state.setOnMouseEntered(e -> {
+            state.setFill(Color.color(0, 0, 1, 0.3));
+            state.setStroke(Color.DARKBLUE);
+        });
+        state.setOnMouseExited(e -> {
+            state.setFill(Color.color(0, 0, 1, 0.0));
+            state.setStroke(Color.TRANSPARENT);
+        });
+        state.setOnMouseClicked(e -> {
+            showWeatherPopup(mapContainer, weatherInfo, state, "#FF593C");
+        });
+
+        return state;
+    }
+
+    private void showWeatherPopup(Group mapContainer, String weatherInfo, Polygon state, String colorCode)
+    {
+        Tooltip tooltip = new Tooltip(weatherInfo);
+        tooltip.setGraphic(new Circle(4, Color.web(colorCode)));
+
+        // place our tooltip next to its state
+        Bounds bounds = state.getBoundsInParent();
+        double tooltipX = bounds.getMinX();
+        double tooltipY = bounds.getMinY() - 30; // slightly above polygon
+
+        // because Tooltip.install() only for hover, have to do this
+        tooltip.show(mapContainer.getScene().getWindow(), mapContainer.localToScreen(tooltipX, tooltipY).getX(), mapContainer.localToScreen(tooltipX, tooltipY).getY());
+
+        // tooltip goes away when we click anywhere else
+        mapContainer.setOnMousePressed(event -> {
+            tooltip.hide();
+            mapContainer.getScene().setOnMousePressed(null); // so we don't try to hide nonexistant tooltips
+        });
+    }
 
 
     // thanks dude on stackoverflow who created ZoomableScrollPane, adjusted to add clamps
