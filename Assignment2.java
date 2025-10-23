@@ -148,20 +148,6 @@ public class Assignment2 extends Application{
         rootWindow.setLeft(forecastBox);
 
         //endregion
-       /*  VBox contentNodes = new VBox();
-        contentNodes.setAlignment(Pos.TOP_CENTER);  // align to top, not center
-        contentNodes.getChildren().addAll(mapScrollPane, mapKeyBox, forecastBox);
-
-        ScrollPane scrollPane = new ScrollPane(contentNodes);
-        scrollPane.setFitToWidth(true);   // fill width of window
-        scrollPane.setFitToHeight(false); // allow vertical scroll
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setContent(contentNodes);
-        scrollPane.setStyle("-fx-background-color: transparent; " + "-fx-background: transparent;");
-
-        rootWindow.setCenter(scrollPane);*/
-
         Scene scene = new Scene(rootWindow, 1920, 1080);
         primaryStage.setScene(scene);
         primaryStage.show();
