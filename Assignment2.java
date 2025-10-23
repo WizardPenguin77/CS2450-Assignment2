@@ -22,10 +22,6 @@ import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.shape.*;
 
-
-
-
-
 public class Assignment2 extends Application{
     @Override
     public void start(Stage primaryStage)
@@ -104,22 +100,69 @@ public class Assignment2 extends Application{
 
         // scrollpane to zoom thanks stackoverflow
         ZoomableScrollPane mapScrollPane = new ZoomableScrollPane(mapContainer);
+        mapScrollPane.setPrefHeight(800);
         mapScrollPane.setStyle("-fx-background-color: transparent; " + "-fx-background: transparent;");
         //endregion
         rootWindow.setCenter(mapScrollPane);
 
-        Polygon florida = createState(new double[]{534.67,363.7,625.8,360.5,661.3,443.5,638.7,452.4,609.7,404,536.3,376.6,532.3,366.9}, "Death", mapContainer);
+        Polygon florida = createState(new double[]{534.67,363.7,625.8,360.5,661.3,443.5,638.7,452.4,609.7,404,536.3,376.6,532.3,366.9}, "Death", mapContainer, "#FF593C");
+        Polygon mexico = createState(new double[]{235.5, 255.6, 316.1, 264.5, 308.9, 350.8, 223.4, 352.4}, "High Wind Warning", mapContainer, "#FAD179");
+        Polygon texas = createState(new double[]{316.9,275,356.5,276.6,355.6,306.5,437.9,325,445.2,391.1,392,459.7, 363.7, 450, 300, 400.8, 257.3, 354, 309.7, 352.4, 317, 275}, "High Wind Warning", mapContainer, "#FAD179");
   
 
-        mapContainer.getChildren().addAll(florida);
+        mapContainer.getChildren().addAll(florida, mexico, texas);
 
         // temporary helper to get coordinates for creating states
         mapView.setOnMouseClicked(e -> {
             System.out.println(e.getX() + ", " + e.getY());
         });
 
+        //region mapKeyImage
+        Image mapKey = new Image(getClass().getResource("mapKey.png").toExternalForm());
+        ImageView mapKeyImage = new ImageView(mapKey);
+        mapKeyImage.setPreserveRatio(true);
+        mapKeyImage.setFitHeight(450);
+        mapKeyImage.setFitWidth(450);
 
-        Scene scene = new Scene(rootWindow, 1280, 720);
+        HBox mapKeyBox = new HBox(mapKeyImage);
+        mapKeyBox.setAlignment(Pos.CENTER);
+        mapKeyBox.setPadding(new Insets(10));
+        mapKeyBox.setStyle("-fx-background-color: linear-gradient(to right, #49AAF4, #7BD0F8);");
+        mapKeyBox.setPrefWidth(450);
+        rootWindow.setRight(mapKeyBox);
+        //endregion
+
+        //region localForecast node
+        Image localForecast = new Image(getClass().getResource("localForecast.png").toExternalForm());
+        ImageView localForecastImage = new ImageView(localForecast);
+        localForecastImage.setPreserveRatio(true);
+        localForecastImage.setFitHeight(450);
+        localForecastImage.setFitWidth(450);
+
+        HBox forecastBox = new HBox(localForecastImage);
+        forecastBox.setAlignment(Pos.CENTER);
+        forecastBox.setPadding(new Insets(10));
+        forecastBox.setStyle("-fx-background-color: linear-gradient(to right, #49AAF4, #7BD0F8);");
+        forecastBox.setPrefWidth(450);
+
+        rootWindow.setLeft(forecastBox);
+
+        //endregion
+       /*  VBox contentNodes = new VBox();
+        contentNodes.setAlignment(Pos.TOP_CENTER);  // align to top, not center
+        contentNodes.getChildren().addAll(mapScrollPane, mapKeyBox, forecastBox);
+
+        ScrollPane scrollPane = new ScrollPane(contentNodes);
+        scrollPane.setFitToWidth(true);   // fill width of window
+        scrollPane.setFitToHeight(false); // allow vertical scroll
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setContent(contentNodes);
+        scrollPane.setStyle("-fx-background-color: transparent; " + "-fx-background: transparent;");
+
+        rootWindow.setCenter(scrollPane);*/
+
+        Scene scene = new Scene(rootWindow, 1920, 1080);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -132,7 +175,7 @@ public class Assignment2 extends Application{
     private double MIN_SCALE = 1.24;
     private double MAX_SCALE = 6;
 
-    private Polygon createState(double[] coordinates, String weatherInfo, Group mapContainer)
+    private Polygon createState(double[] coordinates, String weatherInfo, Group mapContainer, String colorCode)
     {
         Polygon state = new Polygon(coordinates);
         state.setFill(Color.color(0, 0, 1, 0.0));
@@ -148,7 +191,7 @@ public class Assignment2 extends Application{
             state.setStroke(Color.TRANSPARENT);
         });
         state.setOnMouseClicked(e -> {
-            showWeatherPopup(mapContainer, weatherInfo, state, "#FF593C");
+            showWeatherPopup(mapContainer, weatherInfo, state, colorCode);
         });
 
         return state;
