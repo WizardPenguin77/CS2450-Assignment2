@@ -88,7 +88,7 @@ public class Assignment2 extends Application{
         rootWindow.setTop(new VBox(hBox, moreMenu));
 
         //region Map
-        Image mapImage = new Image(getClass().getResource("map.png").toExternalForm());
+        Image mapImage = new Image(getClass().getResource("map1.png").toExternalForm());
         ImageView mapView = new ImageView(mapImage);
 
         mapView.setPreserveRatio(true);
@@ -105,12 +105,16 @@ public class Assignment2 extends Application{
         //endregion
         rootWindow.setCenter(mapScrollPane);
 
-        Polygon florida = createState(new double[]{534.67,363.7,625.8,360.5,661.3,443.5,638.7,452.4,609.7,404,536.3,376.6,532.3,366.9}, "Death", mapContainer, "#FF593C");
-        Polygon mexico = createState(new double[]{235.5, 255.6, 316.1, 264.5, 308.9, 350.8, 223.4, 352.4}, "High Wind Warning", mapContainer, "#FAD179");
-        Polygon texas = createState(new double[]{316.9,275,356.5,276.6,355.6,306.5,437.9,325,445.2,391.1,392,459.7, 363.7, 450, 300, 400.8, 257.3, 354, 309.7, 352.4, 317, 275}, "High Wind Warning", mapContainer, "#FAD179");
-  
+        Polygon florida = createState(new double[]{529, 375.8, 629.8, 375, 665.3, 456.5, 655.6, 468.5, 652.4, 471, 609.7, 401.6, 535.5, 388.7, 534.7, 380.6}, "Alligator Rain Warning", mapContainer, "#4DDD21");
+        Polygon newMexico = createState(new double[]{209.7, 258.1, 296.8, 270.2, 289.5, 359.7, 196.8, 363.7}, "High Wind Warning", mapContainer, "#FAD179");
+        Polygon texas = createState(new double[]{298.4, 278.2, 342, 283.1, 341.1, 315.3, 429.8, 336.3, 438.1, 402.4, 379.8, 475, 348.4, 464.5, 308.9, 402.4, 285.5, 415.3, 241.1, 364.5, 291.1, 360.5}, "High Wind Warning", mapContainer, "#FAD179");
+        Polygon nevada = createState(new double[]{76.6, 138.7, 155.6, 157.3, 136.3, 262.9, 124.2, 280.6, 63.7, 191.9}, "Fire Weather Watch", mapContainer, "#FF593C");
+        Polygon lowDakota = createState(new double[]{297.6, 103.2, 390.3, 108.9, 392.7, 169.4, 294.4, 158.1}, "Severe Thunderstorm Warning", mapContainer, "#0047D4");
+        Polygon minnesota = createState(new double[]{384.7, 51.6, 483.1, 67, 439.5, 113.7, 463.7, 148.4, 394.4, 148.4}, "Severe Thunderstorm Warning", mapContainer, "#0047D4");
+        Polygon iowa = createState(new double[]{393.5, 152.4, 463.7, 152.4, 478.2, 175, 463.7, 204.8, 403.2, 204.8}, "Severe Thunderstorm Warning", mapContainer, "#0047D4");
+        Polygon lowCarolina = createState(new double[]{633.1, 346.8, 590.3, 302.4, 604.8, 292.7, 634.5, 292.7, 664.5, 305.6}, "Coastal Flood Advisory", mapContainer, "#00AAFF");
 
-        mapContainer.getChildren().addAll(florida, mexico, texas);
+        mapContainer.getChildren().addAll(florida, newMexico, texas, nevada, lowDakota, minnesota, iowa, lowCarolina);
 
         // temporary helper to get coordinates for creating states
         mapView.setOnMouseClicked(e -> {
@@ -118,7 +122,7 @@ public class Assignment2 extends Application{
         });
 
         //region mapKeyImage
-        Image mapKey = new Image(getClass().getResource("mapKey.png").toExternalForm());
+        Image mapKey = new Image(getClass().getResource("mapKey1.png").toExternalForm());
         ImageView mapKeyImage = new ImageView(mapKey);
         mapKeyImage.setPreserveRatio(true);
         mapKeyImage.setFitHeight(450);
@@ -133,22 +137,45 @@ public class Assignment2 extends Application{
         //endregion
 
         //region localForecast node
-        Image localForecast = new Image(getClass().getResource("localForecast.png").toExternalForm());
+        Image localForecast = new Image(getClass().getResource("localForecast1.png").toExternalForm());
         ImageView localForecastImage = new ImageView(localForecast);
         localForecastImage.setPreserveRatio(true);
         localForecastImage.setFitHeight(450);
         localForecastImage.setFitWidth(450);
 
-        HBox forecastBox = new HBox(localForecastImage);
+
+        TextField inputTextField = new TextField("Enter City or Zip Code");
+        inputTextField.setMaxWidth(200);
+        
+        // so when we click on the text field, if the default value is there, clear it. If the field is empty and we click out, readd default text
+        inputTextField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                if (inputTextField.getText().equals("Enter City or Zip Code")) {
+                    inputTextField.clear();
+                }
+            } else {
+                if (inputTextField.getText().isEmpty()) {
+                    inputTextField.setText("Enter City or Zip Code");
+                }
+            }
+        });
+
+        AnchorPane forecastPane = new AnchorPane(localForecastImage, inputTextField);
+        AnchorPane.setTopAnchor(inputTextField, 20.0);  
+        AnchorPane.setRightAnchor(inputTextField, 20.0); 
+
+        HBox forecastBox = new HBox(forecastPane);
         forecastBox.setAlignment(Pos.CENTER);
-        forecastBox.setPadding(new Insets(10));
-        forecastBox.setStyle("-fx-background-color: linear-gradient(to right, #49AAF4, #7BD0F8);");
+        forecastBox.setStyle("-fx-background-color: transparent; " + "-fx-background: transparent;");
+
         forecastBox.setPrefWidth(450);
 
-        rootWindow.setLeft(forecastBox);
+        VBox forecastWrapper = new VBox(forecastBox); 
+        forecastWrapper.setAlignment(Pos.CENTER); 
+        rootWindow.setLeft(forecastWrapper);
 
         //endregion
-        Scene scene = new Scene(rootWindow, 1920, 1080);
+        Scene scene = new Scene(rootWindow, 1920, 720);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -204,7 +231,7 @@ public class Assignment2 extends Application{
     }
 
 
-    // thanks dude on stackoverflow who created ZoomableScrollPane, adjusted to add clamps
+    // thanks Daniel Hári on stackoverflow who created ZoomableScrollPane, adjusted to add clamps
     public class ZoomableScrollPane extends ScrollPane {
         private double scaleValue = 0.7;
         private double zoomIntensity = 0.02;
