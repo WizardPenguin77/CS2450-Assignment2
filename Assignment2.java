@@ -105,6 +105,7 @@ public class Assignment2 extends Application{
         //endregion
         rootWindow.setCenter(mapScrollPane);
 
+        // all the interactable states, can you tell i got bored?
         Polygon florida = createState(new double[]{529, 375.8, 629.8, 375, 665.3, 456.5, 655.6, 468.5, 652.4, 471, 609.7, 401.6, 535.5, 388.7, 534.7, 380.6}, "Alligator Rain Warning", mapContainer, "#4DDD21");
         Polygon newMexico = createState(new double[]{209.7, 258.1, 296.8, 270.2, 289.5, 359.7, 196.8, 363.7}, "High Wind Warning", mapContainer, "#FAD179");
         Polygon texas = createState(new double[]{298.4, 278.2, 342, 283.1, 341.1, 315.3, 429.8, 336.3, 438.1, 402.4, 379.8, 475, 348.4, 464.5, 308.9, 402.4, 285.5, 415.3, 241.1, 364.5, 291.1, 360.5}, "High Wind Warning", mapContainer, "#FAD179");
@@ -113,8 +114,17 @@ public class Assignment2 extends Application{
         Polygon minnesota = createState(new double[]{384.7, 51.6, 483.1, 67, 439.5, 113.7, 463.7, 148.4, 394.4, 148.4}, "Severe Thunderstorm Warning", mapContainer, "#0047D4");
         Polygon iowa = createState(new double[]{393.5, 152.4, 463.7, 152.4, 478.2, 175, 463.7, 204.8, 403.2, 204.8}, "Severe Thunderstorm Warning", mapContainer, "#0047D4");
         Polygon lowCarolina = createState(new double[]{633.1, 346.8, 590.3, 302.4, 604.8, 292.7, 634.5, 292.7, 664.5, 305.6}, "Coastal Flood Advisory", mapContainer, "#00AAFF");
+        Polygon ohadi = createState(new double[]{144.4, 22.6, 154, 25, 154, 53.2, 167.7, 71.8, 163.7, 87.1, 202.4, 114.5, 197.6, 161.3, 115.3, 146.8}, "Air Quality Alert", mapContainer, "#D5780D");
+        Polygon michigan = createState(new double[]{527.4, 176.6, 572.6, 171, 582.3, 150.8, 550.8, 88, 496, 77.4, 472.6, 93.5, 505.6, 102.4, 526.6, 134.6, 529, 176.6}, "Lakeshore Flood Watch", mapContainer, "#0D00FF");
+        Polygon cheeseState = createState(new double[]{475.8, 169.4, 511.3, 167, 514.5, 121.8, 500.8, 102.4, 465.3, 88.7, 443.5, 111.3}, "Lakeshore Flood Watch", mapContainer, "#0D00FF");
+        Polygon oblock = createState(new double[]{477.4, 171, 511.3, 169.4, 521, 235.5, 509.7, 264.5, 498.4, 267.7, 463.7, 214.5}, "Lakeshore Flood Watch", mapContainer, "#0D00FF");
+        Polygon indianaJones = createState(new double[]{552.4, 175, 517.7, 182.3, 516, 251.6, 546, 247.6, 558.1, 229.8}, "Lakeshore Flood Watch", mapContainer, "#0D00FF");
+        Polygon libertylibertyliberty = createState(new double[]{703.2, 162.1, 685.5, 156.5, 677.4, 149.2, 620.2, 160, 625.8, 136.3, 672.6, 96, 692.7, 91.1, 707.3, 158.9, 702.4, 162.9, 697.9, 158.9}, "Extreme Cold Warning", mapContainer, "#9DE0FF");
+        Polygon vermonttt = createState(new double[]{692.7, 89.5, 714.5, 85.5, 716.9, 94.4, 712.9, 125.8, 704, 128.2}, "Extreme Cold Warning", mapContainer, "#9DE0FF");
+        Polygon whatStateIsThis = createState(new double[]{688.7, 158.9, 702.4, 164.5, 699.2, 201.6, 686.3, 193.5}, "Extreme Cold Warning", mapContainer, "#9DE0FF");
+        Polygon americahhh = createState(new double[]{633.1, 202.4, 682.3, 193.5, 696.8, 212.1, 695.2, 221, 689.5, 223.4, 666.1, 217.7, 665.6, 203.2, 633.1, 209.7}, "Extreme Cold Warning", mapContainer, "#9DE0FF");
 
-        mapContainer.getChildren().addAll(florida, newMexico, texas, nevada, lowDakota, minnesota, iowa, lowCarolina);
+        mapContainer.getChildren().addAll(florida, newMexico, texas, nevada, lowDakota, minnesota, iowa, lowCarolina, ohadi, michigan, cheeseState, oblock, indianaJones, libertylibertyliberty, vermonttt, whatStateIsThis, americahhh);
 
         // temporary helper to get coordinates for creating states
         mapView.setOnMouseClicked(e -> {
@@ -197,7 +207,7 @@ public class Assignment2 extends Application{
 
         state.setOnMouseEntered(e -> {
             state.setFill(Color.color(0, 0, 1, 0.3));
-            state.setStroke(Color.DARKBLUE);
+            state.setStroke(Color.WHITE);
         });
         state.setOnMouseExited(e -> {
             state.setFill(Color.color(0, 0, 1, 0.0));
