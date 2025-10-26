@@ -99,7 +99,19 @@ public class Assignment2 extends Application{
 
         hBox.getChildren().addAll(homeButton, forecastButton, pastWeatherButton, newsButton, infoButton, safetyButton, eduButton, aboutButton, moreButton);
         //endregion
-        rootWindow.setTop(new VBox(hBox, moreMenu));
+
+        Image logo = new Image(getClass().getResource("logo.png").toExternalForm());
+        ImageView logoImage = new ImageView(logo);
+        logoImage.setPreserveRatio(true);
+        logoImage.setFitHeight(100); 
+        logoImage.setSmooth(true);
+
+        HBox logoBox = new HBox(logoImage);
+        logoBox.setAlignment(Pos.CENTER);
+        logoBox.setPadding(new Insets(15, 0, 15, 0)); 
+        logoBox.setStyle("-fx-background-color: #3f98bbff;"); 
+
+        rootWindow.setTop(new VBox(hBox, moreMenu, logoBox));
 
         //region Map
         Image mapImage = new Image(getClass().getResource("map1.png").toExternalForm());
@@ -199,7 +211,7 @@ public class Assignment2 extends Application{
         rootWindow.setLeft(forecastWrapper);
 
         //endregion
-        Scene scene = new Scene(rootWindow, 1920, 720);
+        Scene scene = new Scene(rootWindow, 1920, 900);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
