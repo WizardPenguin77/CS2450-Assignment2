@@ -1,4 +1,7 @@
 // WEATHER.GOV HIGH-QUALITY PROTOTYPE
+import java.util.Arrays;
+import java.util.List;
+
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -40,13 +43,28 @@ public class Assignment2 extends Application{
         Button forecastButton = new Button("Forecast");
         Button pastWeatherButton = new Button("Past Weather");
         Button newsButton = new Button("News");
+        Button infoButton = new Button("Information");
+        Button safetyButton = new Button("Safety");
+        Button eduButton = new Button ("Education");
+        Button aboutButton = new Button("About");
         Button moreButton = new Button("More ▾");
         VBox moreMenu = new VBox();
         ContextMenu menu = new ContextMenu();
         menu.setStyle("-fx-background-color: #59aacaff;");
 
+        // set the style of every button, and set the underline when clicked, make all other buttons underline off
+        List<Button> buttons = Arrays.asList(homeButton, forecastButton, pastWeatherButton, newsButton, infoButton, safetyButton, eduButton, aboutButton);
+        for (Button button : buttons)
+        {
+            button.setStyle("-fx-background-color: #3f98bbff;");
+            button.setOnAction(e -> {
+                buttons.forEach(b -> b.setUnderline(false));
+                button.setUnderline(true);
+            });
+        }
+
         menu.getItems().addAll(
-            new MenuItem("About"),
+            new MenuItem("Active Alerts"),
             new MenuItem("Contact Us"),
             new MenuItem("Help")
         );
@@ -75,15 +93,11 @@ public class Assignment2 extends Application{
             });
         });     
 
-        homeButton.setStyle("-fx-background-color: #3f98bbff;");
-        forecastButton.setStyle("-fx-background-color: #3f98bbff;");
-        pastWeatherButton.setStyle("-fx-background-color: #3f98bbff;");
-        newsButton.setStyle("-fx-background-color: #3f98bbff;");
         moreButton.setStyle("-fx-background-color: #3f98bbff;");
         moreMenu.setStyle("-fx-background-color: #3f98bbff;");
         moreMenu.setVisible(false);
 
-        hBox.getChildren().addAll(homeButton, forecastButton, pastWeatherButton, newsButton, moreButton);
+        hBox.getChildren().addAll(homeButton, forecastButton, pastWeatherButton, newsButton, infoButton, safetyButton, eduButton, aboutButton, moreButton);
         //endregion
         rootWindow.setTop(new VBox(hBox, moreMenu));
 
@@ -195,9 +209,7 @@ public class Assignment2 extends Application{
         launch(args);
     }
 
-    private double MIN_SCALE = 1.24;
-    private double MAX_SCALE = 6;
-
+    // helper to create the polygon for the state, takes in the coordinates and info about the weather condition
     private Polygon createState(double[] coordinates, String weatherInfo, Group mapContainer, String colorCode)
     {
         Polygon state = new Polygon(coordinates);
@@ -205,6 +217,7 @@ public class Assignment2 extends Application{
         state.setStroke(Color.TRANSPARENT);
         state.setStrokeWidth(2);
 
+        // when entering the state, show the polygon to make it clear its interactable, hide the polygon when leaving the state
         state.setOnMouseEntered(e -> {
             state.setFill(Color.color(0, 0, 1, 0.3));
             state.setStroke(Color.WHITE);
@@ -220,6 +233,7 @@ public class Assignment2 extends Application{
         return state;
     }
 
+    // helper to create the tooltip popup when clicking on a state
     private void showWeatherPopup(Group mapContainer, String weatherInfo, Polygon state, String colorCode)
     {
         Tooltip tooltip = new Tooltip(weatherInfo);
@@ -228,7 +242,7 @@ public class Assignment2 extends Application{
         // place our tooltip next to its state
         Bounds bounds = state.getBoundsInParent();
         double tooltipX = bounds.getMinX();
-        double tooltipY = bounds.getMinY() - 30; // slightly above polygon
+        double tooltipY = bounds.getMinY() - 30;
 
         // because Tooltip.install() only for hover, have to do this
         tooltip.show(mapContainer.getScene().getWindow(), mapContainer.localToScreen(tooltipX, tooltipY).getX(), mapContainer.localToScreen(tooltipX, tooltipY).getY());
@@ -241,6 +255,8 @@ public class Assignment2 extends Application{
     }
 
 
+    private double MIN_SCALE = 1.24;
+    private double MAX_SCALE = 6;
     // thanks Daniel Hári on stackoverflow who created ZoomableScrollPane, adjusted to add clamps
     public class ZoomableScrollPane extends ScrollPane {
         private double scaleValue = 0.7;
